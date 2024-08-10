@@ -25,19 +25,17 @@ cp -r src/* tmp
 
 cd tmp
 
+
+mv manifests/$target/* .
+rm -r manifests
+
 case $target in
 	# To do: More platforms
 	mv2)
-		mv manifests/manifest2.json manifest.json
-		rm -r manifests
 		pkg_zip;;
 	mv3)
-		mv manifests/manifest3.json manifest.json
-		rm -r manifests
 		pkg_zip;;
 	mv3ff)
-		mv manifests/manifest3FF.json manifest.json
-		rm -r manifests
 		pkg_zip;;
 	*)
 		echo "Valid targets: mv2, mv3, mv3ff"
