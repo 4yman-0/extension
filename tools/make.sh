@@ -6,7 +6,17 @@ fail () {
 }
 
 pkg_zip (){
-	zip ../extension.zip -r * > /dev/null # Also move to repo root
+	zip extension.zip -r -9 * > /dev/null
+}
+
+pkg_ff (){
+	pkg_zip
+	mv extension.zip extension.xpi
+}
+
+pkg_chrome (){
+	pkg_zip
+	mv extension.zip extension.crx
 }
 
 if [ ! -d src ]; then
@@ -22,25 +32,27 @@ echo "Building for $target ..."
 
 mkdir tmp
 cp -r src/* tmp
-
 cd tmp
+echo "Created temp dir ..."
 
 
-mv manifests/$target/* .
-rm -r manifests
+mv platform/$target/* .
+rm -r platform
 
 case $target in
 	# To do: More platforms
 	mv2)
-		pkg_zip;;
+		pkg_chrome;;
 	mv3)
-		pkg_zip;;
+		pkg_chrome;;
 	mv3ff)
-		pkg_zip;;
+		pkg_ff;;
 	*)
 		echo "Valid targets: mv2, mv3, mv3ff"
 		fail "Unknown target"
 esac
+
+mv extension.{zip,xpi,crx} ../build
 
 cd ..
 rm -r tmp
