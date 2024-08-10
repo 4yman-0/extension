@@ -6,7 +6,7 @@ fail () {
 }
 
 pkg_zip (){
-		zip ../extension.zip -r * # Also move to repo root
+	zip ../extension.zip -r * > /dev/null # Also move to repo root
 }
 
 if [ ! -d src ]; then
@@ -21,7 +21,7 @@ target="$1"
 echo "Building for $target ..."
 
 mkdir tmp
-cp -r src tmp
+cp -r src/* tmp
 
 cd tmp
 
@@ -43,3 +43,6 @@ case $target in
 		echo "Valid targets: mv2, mv3, mv3ff"
 		fail "Unknown target"
 esac
+
+cd ..
+rm -r tmp
