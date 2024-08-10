@@ -1,13 +1,20 @@
 #!/bin/bash
 
-if [ ! -d src ]; then
-	echo "Wrong current dir `pwd`, quitting..."
+fail () {
+	echo "$1, quitting..."
 	exit 1
+}
+
+pkg_zip (){
+		zip ../extension.zip -r * # Also move to repo root
+}
+
+if [ ! -d src ]; then
+	fail "Wrong current dir `pwd`"
 fi
 
 if [ -z $1 ]; then
-	echo "No target specified, quitting..."
-	exit 1
+	fail "No target specified"
 fi
 
 target="$1"
@@ -19,21 +26,20 @@ cp -r src tmp
 cd tmp
 
 case $target in
+	# To do: More platforms
 	mv2)
 		mv manifests/manifest2.json manifest.json
-		rm -r manifests;;
-		# Other, compress, etc
+		rm -r manifests
+		pkg_zip;;
 	mv3)
-                mv manifests/manifest3.json manifest.json
-                rm -r manifests;;
-                # Other, compress, etc
+		mv manifests/manifest3.json manifest.json
+		rm -r manifests
+		pkg_zip;;
 	mv3ff)
-                mv manifests/manifest3FF.json manifest.json
-                rm -r manifests;;
-                # Other, compress, etc
+		mv manifests/manifest3FF.json manifest.json
+		rm -r manifests
+		pkg_zip;;
 	*)
-		echo "Unknown target"
 		echo "Valid targets: mv2, mv3, mv3ff"
-		exit 1
+		fail "Unknown target"
 esac
-
