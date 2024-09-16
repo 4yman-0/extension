@@ -52,7 +52,7 @@ case $target in
 		fail "Unknown target"
 esac
 
-mv extension.??? ../build
+mv extension.{zip,xpi,crx} ../build
 
 cd ..
 rm -r tmp
