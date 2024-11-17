@@ -1,46 +1,56 @@
 #!/bin/bash
 
-fail () {
+# HELPER FUNCTIONS
+fail (){
 	echo "$1, quitting..."
 	exit 1
 }
 
+stage (){
+	echo "** $1 ..."
+}
+
+# PACKAGING FUNCTIONS
 pkg_zip (){
-	zip extension.zip -r -9 * > /dev/null
+	zip "../build/$1"  -r -9 -- * > /dev/null
 }
 
 pkg_ff (){
-	pkg_zip
-	mv extension.zip extension.xpi
+	pkg_zip extension.xpi
 }
 
 pkg_chrome (){
-	pkg_zip
-	mv extension.zip extension.crx
+	pkg_zip extension.chrome.zip
 }
 
+# PROGRAM
 if [ ! -d src ]; then
-	fail "Wrong current dir `pwd`"
+	fail "Wrong current dir $(pwd)"
 fi
 
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
 	fail "No target specified"
 fi
 
 target="$1"
-echo "Building for $target ..."
+stage "Build for $target"
 
+stage "Create temporary directory"
+rm -r tmp &> /dev/null
 mkdir tmp
+
+stage "Copy source code"
 cp -r src/* tmp
-cd tmp
-echo "Created temp dir ..."
 
+cd tmp || exit 1
 
-mv platform/$target/* .
+stage "Move platform-specific files"
+mv "platform/$target/"* .
 rm -r platform
 
+stage "Package for browser"
 case $target in
-	# To do: More platforms
+	# TODO: More platforms
 	mv2)
 		pkg_chrome;;
 	mv3)
@@ -52,7 +62,5 @@ case $target in
 		fail "Unknown target"
 esac
 
-mv extension.{zip,xpi,crx} ../build
-
-cd ..
+cd .. || exit 1
 rm -r tmp
