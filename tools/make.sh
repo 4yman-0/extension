@@ -10,7 +10,7 @@ stage (){
 	echo "** $1 ..."
 }
 
-#PACKAGING FUNCTIONS
+# PACKAGING FUNCTIONS
 pkg_zip (){
 	zip "../build/$1"  -r -9 -- * > /dev/null
 }
@@ -23,7 +23,7 @@ pkg_chrome (){
 	pkg_zip extension.chrome.zip
 }
 
-#PROGRAM
+# PROGRAM
 if [ ! -d src ]; then
 	fail "Wrong current dir $(pwd)"
 fi
