@@ -1,0 +1,46 @@
+name: "Build extension for release"
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Build for manifest version 2
+        run: |
+          ./tools/make.sh mv2
+          mv extension.chrome.zip mv2.zip
+
+      - name: Build for manifest version 3
+        run: |
+          ./tools/make.sh mv3
+          mv extension.chrome.zip mv3.zip
+
+      - name: Build for manifest version 3 (firefox)
+        run: |
+          ./tools/make.sh mv3ff
+          mv extension.xpi mv3ff.zip
+
+      - name: Upload build artifacts for manifest version 2
+        uses: Shopify/upload-to-release@v2.0.0
+        with:
+          name: mv2.zip
+          path: mv2.zip
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build artifacts for manifest version 3
+        uses: Shopify/upload-to-release@v2.0.0
+        with:
+          name: mv3.zip
+          path: mv3.zip
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload build artifacts for manifest version 3 (firefox)
+        uses: Shopify/upload-to-release@v2.0.0
+        with:
+          name: mv3ff.zip
+          path: mv3ff.zip
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
