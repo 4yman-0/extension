@@ -11,18 +11,15 @@ jobs:
 
       - name: Build for manifest version 2
         run: |
-          ./tools/make.sh mv2
-          mv extension.chrome.zip mv2.zip
+          ./tools/make.sh mv2 mv2.zip
 
       - name: Build for manifest version 3
         run: |
-          ./tools/make.sh mv3
-          mv extension.chrome.zip mv3.zip
+          ./tools/make.sh mv3 mv3.zip
 
       - name: Build for manifest version 3 (firefox)
         run: |
-          ./tools/make.sh mv3ff
-          mv extension.xpi mv3ff.zip
+          ./tools/make.sh mv3ff mv3ff.zip
 
       - name: Upload build artifacts for manifest version 2
         uses: Shopify/upload-to-release@v2.0.0
