@@ -12,7 +12,8 @@ stage (){
 
 # PACKAGING FUNCTIONS
 pkg_zip (){
-	zip "$out" -r -9 -- * > /dev/null
+	echo "To: $out"
+	zip "../$out" -r -9 -- * > /dev/null
 }
 
 pkg_ff (){
