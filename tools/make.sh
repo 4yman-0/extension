@@ -12,15 +12,15 @@ stage (){
 
 # PACKAGING FUNCTIONS
 pkg_zip (){
-	zip "../build/$1"  -r -9 -- * > /dev/null
+	zip "$out" -r -9 -- * > /dev/null
 }
 
 pkg_ff (){
-	pkg_zip extension.xpi
+	pkg_zip
 }
 
-pkg_chrome (){
-	pkg_zip extension.chrome.zip
+pkg_chromium (){
+	pkg_zip
 }
 
 # PROGRAM
@@ -28,20 +28,23 @@ if [ ! -d src ]; then
 	fail "Wrong current dir $(pwd)"
 fi
 
-if [ -z "$1" ]; then
+target="$1"
+out="$2"
+
+if [ -z "$target" ]; then
 	fail "No target specified"
 fi
 
-target="$1"
-stage "Build for $target"
-
-stage "Create temporary directory"
-rm -r tmp &> /dev/null
-mkdir tmp
+if [ -z "$out" ]; then
+	out="build/extension.zip"
+fi
 
 stage "Copy source code"
-cp -r src/* tmp
+if [ ! -d build ];then 
+	mkdir build
+fi
 
+cp -r src tmp
 cd tmp || exit 1
 
 stage "Move platform-specific files"
@@ -52,9 +55,9 @@ stage "Package for browser"
 case $target in
 	# TODO: More platforms
 	mv2)
-		pkg_chrome;;
+		pkg_chromium;;
 	mv3)
-		pkg_chrome;;
+		pkg_chromium;;
 	mv3ff)
 		pkg_ff;;
 	*)
